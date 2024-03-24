@@ -13,19 +13,22 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javafx.util.Duration;
 import top.s0uths1de.core.FileComparator;
 import top.s0uths1de.tools.Simplify;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FileComparatorMainWindow extends Application {
-    private static final String TITLE = "FileComparator bate:0.1.5";
+    private static final String TITLE = "FileComparator bate:0.1.6";
     private static final int WIDTH = 854;
     private static final int HEIGHT = 480;
     private static int clickCount = 0;
@@ -45,9 +48,9 @@ public class FileComparatorMainWindow extends Application {
         this.unsubmittedListView = new ListView<>();
         this.wrongNameListView = new ListView<>();
         this.unsubmittedListView.getItems().add("未交作业的同学");
-        this.unsubmittedListView.setStyle("-fx-background-color: transparent");
+        this.unsubmittedListView.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         this.wrongNameListView.getItems().add("名字错误的同学");
-        this.wrongNameListView.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5)");
+        this.wrongNameListView.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         this.unsubmittedCsvList = new ArrayList<>();
         this.wrongNameListViewDirectoryFiles = new ArrayList<>();
         this.csvList = new ArrayList<>();
@@ -62,10 +65,18 @@ public class FileComparatorMainWindow extends Application {
         Button explorerButton = setExplorer(stage);
         Button beginButton = setBegin();
 
-        media = new Media(Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/sound/music.mp3").toString());
+        media = new Media(Simplify.urlToString(this.getClass(), "/top/s0uths1de/filecomparator/assets/sound/music.mp3").toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setVolume(0.05);
         mediaPlayer.play();
+
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                mediaPlayer.seek(Duration.ZERO);
+                mediaPlayer.play();
+            }
+        });
 
         hBox.getChildren().addAll(infoButton, explorerButton, beginButton);
         hBox.setSpacing(20);
@@ -75,15 +86,15 @@ public class FileComparatorMainWindow extends Application {
         setButtonStyle(explorerButton);
         setButtonStyle(beginButton);
 
-        Image image = new Image(Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/query.png").toString());
+        Image image = new Image(Simplify.urlToString(this.getClass(), "/top/s0uths1de/filecomparator/assets/query.png").toString());
         Scene scene = new Scene(hBox, WIDTH, HEIGHT);
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE)
                 stage.close();
         });
-        
+
         stage.getIcons().add(image);
-        scene.getStylesheets().add(Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/css/main.css").toExternalForm());
+        scene.getStylesheets().add(Simplify.urlToString(this.getClass(), "/top/s0uths1de/filecomparator/assets/css/main.css").toExternalForm());
         stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.show();
@@ -103,7 +114,7 @@ public class FileComparatorMainWindow extends Application {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {
                 for (File file : db.getFiles()) {
-                    if (file != null){
+                    if (file != null) {
                         csvFilePath = file.getPath();
                         return;
                     }
@@ -127,7 +138,7 @@ public class FileComparatorMainWindow extends Application {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {
                 for (File file : db.getFiles()) {
-                    if (file != null){
+                    if (file != null) {
                         directoryPath = file.getPath();
                         return;
                     }
@@ -144,8 +155,8 @@ public class FileComparatorMainWindow extends Application {
         });
     }
 
-    private void setButtonStyle(Button button){
-        String buttonStyle = Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/css/button.css").toExternalForm();
+    private void setButtonStyle(Button button) {
+        String buttonStyle = Simplify.urlToString(this.getClass(), "/top/s0uths1de/filecomparator/assets/css/button.css").toExternalForm();
         button.getStylesheets().add(buttonStyle);
     }
 
@@ -162,13 +173,15 @@ public class FileComparatorMainWindow extends Application {
                 if (csvFilePath == null)
                     alert.setContentText("csvFilePath 为空");
                 else
-                    alert.setContentText("directoryPath  为空");
+                    alert.setContentText("directoryPath 为空");
                 alert.showAndWait();
                 return;
             }
             FileComparator comparator = new FileComparator(csvFilePath, directoryPath);
 
-            this.csvList = comparator.getCsvList();
+            Map<String, String> csvMap = comparator.getCsvMap();
+            for (Map.Entry<String, String> stringStringEntry : csvMap.entrySet())
+                this.csvList.add(stringStringEntry.getKey() + stringStringEntry.getValue());
             this.directoryFiles = comparator.getDirectoryList();
 
             for (String file : csvList)
@@ -195,9 +208,9 @@ public class FileComparatorMainWindow extends Application {
             }
             clickCount++;
             count++;
-            if (beginButton.getText().equals("开始"))
+            if (beginButton.getText().equals("开始")) {
                 beginButton.setText("重新选择");
-            else
+            } else
                 beginButton.setText("开始");
         });
         return beginButton;
