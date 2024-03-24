@@ -7,23 +7,25 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
+
 import top.s0uths1de.core.FileComparator;
+import top.s0uths1de.tools.Simplify;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FileComparatorMainWindow extends Application {
-    private static final String TITLE = "FileComparator bate:0.1.4";
+    private static final String TITLE = "FileComparator bate:0.1.5";
     private static final int WIDTH = 854;
     private static final int HEIGHT = 480;
     private static int clickCount = 0;
@@ -54,15 +56,16 @@ public class FileComparatorMainWindow extends Application {
 
     @Override
     public void start(Stage stage) {
-
+        Media media;
+        MediaPlayer mediaPlayer;
         Button infoButton = setInfo(stage);
         Button explorerButton = setExplorer(stage);
         Button beginButton = setBegin();
-        Media media = new Media(Objects.requireNonNull(this.getClass().getResource("/top/s0uths1de/filecomparator/assets/sound/music.mp3")).toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setVolume(0.1);
+
+        media = new Media(Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/sound/music.mp3").toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(0.05);
         mediaPlayer.play();
-        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
 
         hBox.getChildren().addAll(infoButton, explorerButton, beginButton);
         hBox.setSpacing(20);
@@ -72,14 +75,15 @@ public class FileComparatorMainWindow extends Application {
         setButtonStyle(explorerButton);
         setButtonStyle(beginButton);
 
-        Image image = new Image(Objects.requireNonNull(this.getClass().getResource("/top/s0uths1de/filecomparator/assets/query.png")).toString());
+        Image image = new Image(Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/query.png").toString());
         Scene scene = new Scene(hBox, WIDTH, HEIGHT);
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE)
                 stage.close();
         });
+        
         stage.getIcons().add(image);
-        scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/top/s0uths1de/filecomparator/assets/css/main.css")).toExternalForm());
+        scene.getStylesheets().add(Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/css/main.css").toExternalForm());
         stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.show();
@@ -94,6 +98,18 @@ public class FileComparatorMainWindow extends Application {
             if (file != null)
                 csvFilePath = file.getPath();
         });
+        setOnDragOver(infoButton);
+        infoButton.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasFiles()) {
+                for (File file : db.getFiles()) {
+                    if (file != null){
+                        csvFilePath = file.getPath();
+                        return;
+                    }
+                }
+            }
+        });
         return infoButton;
     }
 
@@ -106,11 +122,30 @@ public class FileComparatorMainWindow extends Application {
             if (folder != null)
                 directoryPath = folder.getPath();
         });
+        setOnDragOver(explorerButton);
+        explorerButton.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if (db.hasFiles()) {
+                for (File file : db.getFiles()) {
+                    if (file != null){
+                        directoryPath = file.getPath();
+                        return;
+                    }
+                }
+            }
+        });
         return explorerButton;
     }
 
+    private static void setOnDragOver(Button explorerButton) {
+        explorerButton.setOnDragOver(event -> {
+            if (event.getDragboard().hasFiles())
+                event.acceptTransferModes(TransferMode.ANY);
+        });
+    }
+
     private void setButtonStyle(Button button){
-        String buttonStyle = Objects.requireNonNull(this.getClass().getResource("/top/s0uths1de/filecomparator/assets/css/button.css")).toExternalForm();
+        String buttonStyle = Simplify.urlToString(this.getClass(),"/top/s0uths1de/filecomparator/assets/css/button.css").toExternalForm();
         button.getStylesheets().add(buttonStyle);
     }
 
