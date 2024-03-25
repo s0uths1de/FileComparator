@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FileComparatorMainWindow extends Application {
-    private static final String TITLE = "FileComparator bate:0.1.6";
+    private static final String TITLE = "FileComparator bate:0.1.7";
     private static final int WIDTH = 854;
     private static final int HEIGHT = 480;
     private static int clickCount = 0;
@@ -194,6 +194,9 @@ public class FileComparatorMainWindow extends Application {
                 unsubmittedListView.getItems().add(file);
             for (String file : wrongNameListViewDirectoryFiles)
                 wrongNameListView.getItems().add(file);
+
+            wrongNameListView.getItems().add("共计:"+ (wrongNameListView.getItems().size()-1));
+            unsubmittedListView.getItems().add("共计:"+(unsubmittedListView.getItems().size()-1));
 
             if (count == 0)
                 this.hBox.getChildren().addAll(unsubmittedListView, wrongNameListView);
