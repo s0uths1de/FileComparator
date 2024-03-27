@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,14 +18,14 @@ public class FileComparator {
     private final List<String> directoryList;
     private List<String> name;
     private List<String> id;
-    public static final String matchTenConsecutiveDigits = "\\d{10}";
+    public static final String matchTenConsecutiveDigits = "\\d+";
     public static final String matchChineseCharacter = "[\u4e00-\u9fff]+";
 
     public FileComparator(File info, File directory) {
         this.infoMap = readInfo(info.getPath());
-        this.directoryList = listFiles(directory.getPath());
         this.name = new ArrayList<>();
         this.id = new ArrayList<>();
+        this.directoryList = listFiles(directory.getPath());
     }
 
     public Map<String, String> getInfoMap() {
@@ -34,7 +38,7 @@ public class FileComparator {
 
     public static Map<String, String> readInfo(String info) {
         Map<String, String> idAndNameMap = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(info))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(info, Charset.forName("GB2312")))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String id = match(line, matchTenConsecutiveDigits);
@@ -67,9 +71,15 @@ public class FileComparator {
                     String fileName = file.getName();
                     String id = match(fileName, matchTenConsecutiveDigits);
                     String name = match(fileName, matchChineseCharacter);
-                    this.id.add(id);
-                    this.name.add(name);
-                    fileList.add(id + name);
+                    if (id == null && name == null) {
+                        fileList.add(file.getName());
+                    } else {
+                        id = id == null ? "" : id;
+                        name = name == null ? "" : name;
+                        this.id.add(id);
+                        this.name.add(name);
+                        fileList.add(id + name);
+                    }
                 }
             }
         }
