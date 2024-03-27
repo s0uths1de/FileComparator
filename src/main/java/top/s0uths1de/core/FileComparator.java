@@ -10,27 +10,31 @@ import java.util.regex.Pattern;
 
 public class FileComparator {
 
-    private final Map<String, String> csvList;
+    private final Map<String, String> infoMap;
     private final List<String> directoryList;
+    private List<String> name;
+    private List<String> id;
     public static final String matchTenConsecutiveDigits = "\\d{10}";
     public static final String matchChineseCharacter = "[\u4e00-\u9fff]+";
 
-    public FileComparator(String csvFilePath, String directoryPath) {
-        this.csvList = readInfo(csvFilePath);
-        this.directoryList = listFiles(directoryPath);
+    public FileComparator(File info, File directory) {
+        this.infoMap = readInfo(info.getPath());
+        this.directoryList = listFiles(directory.getPath());
+        this.name = new ArrayList<>();
+        this.id = new ArrayList<>();
     }
 
-    public Map<String, String> getCsvMap() {
-        return csvList;
+    public Map<String, String> getInfoMap() {
+        return infoMap;
     }
 
     public List<String> getDirectoryList() {
         return directoryList;
     }
 
-    public static Map<String, String> readInfo(String csvFilePath) {
+    public static Map<String, String> readInfo(String info) {
         Map<String, String> idAndNameMap = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(info))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String id = match(line, matchTenConsecutiveDigits);
@@ -41,7 +45,6 @@ public class FileComparator {
             e.printStackTrace();
         }
         return idAndNameMap;
-
     }
 
     private static String match(String string, String regex) {
@@ -54,18 +57,30 @@ public class FileComparator {
         }
     }
 
-    private static List<String> listFiles(String directoryPath) {
+    private List<String> listFiles(String path) {
         List<String> fileList = new ArrayList<>();
-        File directory = new File(directoryPath);
+        File directory = new File(path);
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
                     String fileName = file.getName();
-                    fileList.add(match(fileName, matchTenConsecutiveDigits)+match(fileName, matchChineseCharacter));
+                    String id = match(fileName, matchTenConsecutiveDigits);
+                    String name = match(fileName, matchChineseCharacter);
+                    this.id.add(id);
+                    this.name.add(name);
+                    fileList.add(id + name);
                 }
             }
         }
         return fileList;
+    }
+
+    public List<String> getName() {
+        return name;
+    }
+
+    public List<String> getId() {
+        return id;
     }
 }
