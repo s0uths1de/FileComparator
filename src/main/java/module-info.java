@@ -1,9 +1,8 @@
-module top.s0uths1de.filecomparator {
+module top.s0uths1de {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.media;
 
-    opens top.s0uths1de.filecomparator to javafx.fxml;
+    opens top.s0uths1de to javafx.fxml;
     exports top.s0uths1de;
     opens top.s0uths1de.controller to javafx.fxml;
 }

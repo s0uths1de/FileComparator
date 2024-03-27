@@ -4,6 +4,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import top.s0uths1de.core.FileComparator;
 import top.s0uths1de.entity.FileEntity;
@@ -17,9 +19,8 @@ public class SetButton {
     public static void setInfo(Button button, Stage stage, FileEntity fe) {
         button.setText("读取信息文件");
         button.setOnAction(actionEvent -> {
-            //FileChooser fileChooser = new FileChooser();
-            //fe.setInfo(fileChooser.showOpenDialog(stage));
-            fe.setInfo(new File("C:\\Users\\ZhangJun\\Desktop\\作业.csv"));
+            FileChooser fileChooser = new FileChooser();
+            fe.setInfo(fileChooser.showOpenDialog(stage));
         });
 
         setOnDragOver(button);
@@ -40,10 +41,9 @@ public class SetButton {
     public static void setExplorer(Button button, Stage stage, FileEntity fe) {
         button.setText("读取作业");
         button.setOnAction(event -> {
-            //DirectoryChooser directoryChooser = new DirectoryChooser();
-            //File folder = directoryChooser.showDialog(stage);
-            //if (folder != null) fe.setHomework(folder);
-            fe.setHomework(new File("C:\\Users\\ZhangJun\\Desktop\\Vue\\2\\实验报告二 - 副本"));
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            File folder = directoryChooser.showDialog(stage);
+            if (folder != null) fe.setHomework(folder);
         });
 
         setOnDragOver(button);
@@ -94,6 +94,7 @@ public class SetButton {
             List<String> idError = new ArrayList<>();
             List<String> correctList = new ArrayList<>();
             List<String> unknownList = new ArrayList<>(directoryList);
+            System.out.println(fe.toString());
             infoMap.forEach((stuid, stuname) -> {
                 if (stuid.equals("null") || stuname.equals("null")) {
                     return;
