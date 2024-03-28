@@ -3,6 +3,7 @@
     -fx-border-radius: 10px;
     -fx-border-color: black;
     -fx-font-size: 14px;
+    -fx-padding: 10px 10px;
 }
 .button:hover{
     -fx-background-color: gray;

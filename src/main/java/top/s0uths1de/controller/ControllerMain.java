@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import top.s0uths1de.ComparatorValue;
@@ -19,6 +20,10 @@ public class ControllerMain {
     @FXML
     private URL location;
 
+
+    @FXML
+    private HBox box;
+
     @FXML
     private Button readHomework;
 
@@ -26,13 +31,13 @@ public class ControllerMain {
     private Button readInfo;
 
     @FXML
+    private Button setting;
+
+    @FXML
     private Text softInfo;
 
     @FXML
     private Button start;
-
-    @FXML
-    private Button setting;
 
     @FXML
     void initialize() {

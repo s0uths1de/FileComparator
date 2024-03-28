@@ -3,4 +3,6 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-size: cover;
+    -fx-pref-width: 854px;
+    -fx-pref-height: 480px;
 }

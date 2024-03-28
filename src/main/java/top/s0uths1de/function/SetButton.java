@@ -1,5 +1,8 @@
 package top.s0uths1de.function;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.Dragboard;
@@ -11,6 +14,7 @@ import top.s0uths1de.core.FileComparator;
 import top.s0uths1de.entity.FileEntity;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -82,19 +86,17 @@ public class SetButton {
                 alert.showAndWait();
                 return;
             }
+
             FileComparator comparator = new FileComparator(fe.getInfo(), fe.getHomework());
             Map<String, String> infoMap = comparator.getInfoMap();
             List<String> directoryList = comparator.getDirectoryList();
             List<String> id = comparator.getId();
             List<String> name = comparator.getName();
-            int mapSize = infoMap.size();
-            int listSize = directoryList.size();
             List<String> unpaidList = new ArrayList<>();
             List<String> nameError = new ArrayList<>();
             List<String> idError = new ArrayList<>();
             List<String> correctList = new ArrayList<>();
             List<String> unknownList = new ArrayList<>(directoryList);
-            System.out.println(fe.toString());
             infoMap.forEach((stuid, stuname) -> {
                 if (stuid.equals("null") || stuname.equals("null")) {
                     return;
