@@ -14,7 +14,7 @@
 > 读取一个文件夹，其中为所有人的作业
 
 3、点击开始
-> 出现为完成作业的人，命名错误的人（此功能暂未实现）
+> 出现未完成作业的人，命名错误的人（此功能暂未实现）
 
 截图
 ![jietu.png](src%2Fmain%2Fresources%2Ftop%2Fs0uths1de%2Ffilecomparator%2Fassets%2Fjietu.png)
