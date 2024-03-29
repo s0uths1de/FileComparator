@@ -1,9 +1,14 @@
 package top.s0uths1de.function;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -12,12 +17,21 @@ import top.s0uths1de.core.FileComparator;
 import top.s0uths1de.entity.FileEntity;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class SetButton {
-    public static void setInfo(Button button, Stage stage, FileEntity fe) {
+
+    public static FileEntity fe;
+
+    public SetButton() {
+        fe = new FileEntity();
+    }
+
+    public static FileEntity setInfo(Button button, Stage stage) {
+        FileEntity fe = new FileEntity();
         button.setText("读取信息文件");
         button.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
@@ -37,9 +51,10 @@ public class SetButton {
                 }
             }
         });
+        return fe;
     }
 
-    public static void setExplorer(Button button, Stage stage, FileEntity fe) {
+    public static FileEntity setExplorer(Button button, Stage stage,FileEntity fe) {
         button.setText("读取作业");
         button.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -60,6 +75,7 @@ public class SetButton {
                 }
             }
         });
+        return fe;
     }
 
     private static void setOnDragOver(Button explorerButton) {
@@ -68,7 +84,7 @@ public class SetButton {
         });
     }
 
-    public static void setStart(Main button, Stage stage, FileEntity fe) {
+    public static void setStart(Main main, Stage stage,FileEntity fe) {
         final String fileFormat = "{ID}{NAME}"; // TODO: allow user to modify this
         //final String fileFormat = "{ID}{NAME}.docx"; // TODO: ignore extension name at present
 
@@ -108,6 +124,16 @@ public class SetButton {
             else unpaidList.add(current);
         });
         System.out.printf("已交：\n%s\n未交：\n%s\n学号错误：\n%s\n姓名错误：\n%s\n未识别文件：\n%s\n", correctList, unpaidList, idError, nameError, unknownList);
-
+        FXMLLoader resultFXML = new FXMLLoader(main.getClass().getResource("/top/s0uths1de/filecomparator/fxmlui/main.fxml"));
+        Pane resultUi = null;
+        try {
+            resultUi = resultFXML.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        List<Node> a = resultUi.getChildren().subList(1, 2);
+        Pane pane = new StackPane();
+        pane.getChildren().addAll(a);
+        stage.setScene(new Scene(pane, 854, 480));
     }
 }

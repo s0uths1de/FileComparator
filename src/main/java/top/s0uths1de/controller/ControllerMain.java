@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,34 +28,56 @@ public class ControllerMain {
     @FXML
     private URL location;
 
-
     @FXML
-    private Button a;
-
-    @FXML
-    private Button b;
+    private Button back;
 
     @FXML
     private Pane main;
 
     @FXML
+    private Button readExplorer;
+
+    @FXML
+    private Button readInfo;
+
+    @FXML
+    private Button rename;
+
+    @FXML
+    private Button replace;
+
+    @FXML
     private Pane result;
+
+    @FXML
+    private Button showIdName;
+
+    @FXML
+    private Button showNameError;
+
+    @FXML
+    private Button showUnknown;
+
+    @FXML
+    private Button showUnpaid;
+
+    @FXML
+    private Button start;
+
+    private static FileEntity fe;
+
+    public static FileEntity getFe() {
+        return fe;
+    }
+
+    public static void setFe(FileEntity fe) {
+        ControllerMain.fe = fe;
+    }
 
     @FXML
     void initialize() throws IOException {
         Stage stage = new Stage();
-//        FileEntity fileEntity = new FileEntity();
-//        SetButton.setInfo(readInfo,stage,fileEntity);
-//        SetButton.setExplorer(readHomework,stage,fileEntity);
-//        SetButton.setStart(start,stage,fileEntity);
-//        softInfo.setText(ComparatorValue.TITLE);
-
-//            FXMLLoader mainUi = new FXMLLoader(getClass().getResource("/top/s0uths1de/filecomparator/fxmlui/main.fxml"));
-//            Pane root = null;
-//            root = mainUi.load();
-//            List<Node> nodes = root.getChildren().subList(1,2);
-//            Pane subscene = new StackPane();
-//            subscene.getChildren().addAll(nodes);
-//            stage.setScene(new Scene(subscene,854,480));
+        fe = SetButton.setInfo(readInfo, stage);
+        SetButton.setExplorer(readExplorer, stage, fe);
     }
 }

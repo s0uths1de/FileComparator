@@ -2,8 +2,9 @@
     -fx-background-color: transparent;
     -fx-border-radius: 10px;
     -fx-border-color: black;
-    -fx-font-size: 14px;
-    -fx-padding: 10px 10px;
+    -fx-font-size: 15px;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 50px;
 }
 .button:hover{
     -fx-background-color: gray;

@@ -6,6 +6,9 @@ public class FileEntity {
     File info;
     File homework;
 
+    public FileEntity() {
+    }
+
     public FileEntity(File info, File homework) {
         this.info = info;
         this.homework = homework;
