@@ -35,6 +35,7 @@ public class Main extends Application {
         subscene.getChildren().addAll(nodes);
         ((Button) (subscene.lookup("#start"))).setOnAction(event -> {
             fe = ControllerMain.getFe();
+
             SetButton.setStart(this,primaryStage,fe);
         });
         primaryStage.setScene(new Scene(subscene, 854, 480));
