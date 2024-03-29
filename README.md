@@ -5,6 +5,7 @@
 环境：Liberica JDK Full 64bit [链接](https://www.injdk.cn/)
 
 使用说明：
+
 1、读信息文件
 > 读取文件建议为vsc，每一行必须包括10个数字的学号，以及学号
 
@@ -15,4 +16,4 @@
 > 出现为完成作业的人，命名错误的人（此功能暂未实现）
 
 截图
-![jietu.png](src%2Fmain%2Fresources%2Ftop%2Fs0uths1de%2Ffilecomparator%2Fassets%2Fjietu.png)
+![jietu.png](src%2Fmain%2Fresources%2Ftop%2Fs0uths1de%2Ffilecomparator%2Fassets%2Fjietu.jpg)
