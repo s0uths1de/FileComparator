@@ -2,7 +2,9 @@
 
 快速比对作业查询的GUI界面工具
 
-环境：Liberica JDK Full 64bit [链接](https://www.injdk.cn/)
+推荐环境：Liberica JDK Full 64bit [链接](https://www.injdk.cn/)
+
+其他JDK17以上带有JavaFx均可
 
 使用说明：
 1、读信息文件
@@ -16,3 +18,6 @@
 
 截图
 ![jietu.png](src%2Fmain%2Fresources%2Ftop%2Fs0uths1de%2Ffilecomparator%2Fassets%2Fjietu.png)
+
+运行方式：
+>Java -jar [你下载jar包的路径]
