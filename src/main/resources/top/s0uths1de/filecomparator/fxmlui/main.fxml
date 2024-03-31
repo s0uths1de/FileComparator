@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
@@ -24,19 +25,26 @@
             <HBox prefHeight="480.0" prefWidth="854.0">
                <children>
                   <Pane prefHeight="480.0" prefWidth="107.0" />
-                  <ListView prefHeight="417.0" prefWidth="222.0" stylesheets="@../assets/css/button.css" />
+                  <ListView fx:id="unpaidList" maxHeight="455.0" prefHeight="455.0" prefWidth="222.0" stylesheets="@../assets/css/button.css">
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin></ListView>
                   <VBox alignment="CENTER" prefHeight="480.0" prefWidth="216.0" stylesheets="@../assets/css/button.css">
                      <children>
-                        <Button fx:id="showUnpaid" mnemonicParsing="false" text="总览" />
-                        <Button fx:id="showIdName" mnemonicParsing="false" text="名字错误" />
-                        <Button fx:id="showNameError" mnemonicParsing="false" text="学号错误" />
-                        <Button fx:id="showUnknown" mnemonicParsing="false" text="学号错误" />
+                        <Button fx:id="showAll" mnemonicParsing="false" text="总览" />
+                        <Button fx:id="showNameError" mnemonicParsing="false" text="名字错误" />
+                        <Button fx:id="showIdName" mnemonicParsing="false" text="学号错误" />
+                        <Button fx:id="showUnknown" mnemonicParsing="false" text="未知学生" />
                         <Button fx:id="rename" mnemonicParsing="false" text="重命名" />
                         <Button fx:id="replace" mnemonicParsing="false" text="替换" />
                         <Button fx:id="back" mnemonicParsing="false" text="返回" />
                      </children>
                   </VBox>
-                  <ListView prefHeight="480.0" prefWidth="222.0" />
+                  <ListView fx:id="other" maxHeight="455.0" prefHeight="480.0" prefWidth="222.0">
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </ListView>
                </children>
             </HBox>
          </children>

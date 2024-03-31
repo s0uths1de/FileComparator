@@ -12,7 +12,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import top.s0uths1de.ComparatorValue;
 import top.s0uths1de.Main;
+import top.s0uths1de.controller.ControllerMain;
 import top.s0uths1de.core.FileComparator;
 import top.s0uths1de.entity.FileEntity;
 
@@ -54,7 +56,7 @@ public class SetButton {
         return fe;
     }
 
-    public static FileEntity setExplorer(Button button, Stage stage,FileEntity fe) {
+    public static FileEntity setExplorer(Button button, Stage stage, FileEntity fe) {
         button.setText("读取作业");
         button.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -84,7 +86,7 @@ public class SetButton {
         });
     }
 
-    public static void setStart(Main main, Stage stage,FileEntity fe) {
+    public static void setStart(FileEntity fe) {
         final String fileFormat = "{ID}{NAME}"; // TODO: allow user to modify this
         //final String fileFormat = "{ID}{NAME}.docx"; // TODO: ignore extension name at present
 
@@ -104,10 +106,10 @@ public class SetButton {
         List<String> directoryList = comparator.getDirectoryList();
         List<String> id = comparator.getId();
         List<String> name = comparator.getName();
-        List<String> unpaidList = new ArrayList<>();
-        List<String> nameError = new ArrayList<>();
-        List<String> idError = new ArrayList<>();
         List<String> correctList = new ArrayList<>();
+        List<String> unpaidList = new ArrayList<>();
+        List<String> idError = new ArrayList<>();
+        List<String> nameError = new ArrayList<>();
         List<String> unknownList = new ArrayList<>(directoryList);
         infoMap.forEach((stuid, stuname) -> {
             if (stuid.equals("null") || stuname.equals("null")) {
@@ -123,17 +125,33 @@ public class SetButton {
             else if (name.contains(stuname)) idError.add(current);
             else unpaidList.add(current);
         });
-        System.out.printf("已交：\n%s\n未交：\n%s\n学号错误：\n%s\n姓名错误：\n%s\n未识别文件：\n%s\n", correctList, unpaidList, idError, nameError, unknownList);
-        FXMLLoader resultFXML = new FXMLLoader(main.getClass().getResource("/top/s0uths1de/filecomparator/fxmlui/main.fxml"));
+        List<List> lists = new ArrayList<>() {{
+            add(correctList);
+            add(unpaidList);
+            add(idError);
+            add(nameError);
+            add(unknownList);
+        }};
+        ControllerMain.setIsOneOrTwo(true);
+        ControllerMain.setList(lists);
+        setScene(false);
+    }
+    public static void setScene(boolean isMain){
+        FXMLLoader resultFXML = new FXMLLoader(Main.class.getResource("/top/s0uths1de/filecomparator/fxmlui/main.fxml"));
         Pane resultUi = null;
         try {
             resultUi = resultFXML.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        List<Node> a = resultUi.getChildren().subList(1, 2);
+        List<Node> nodes =null;
+        if (isMain)
+           nodes =resultUi.getChildren().subList(0, 1);
+        else
+           nodes =resultUi.getChildren().subList(1, 2);
         Pane pane = new StackPane();
-        pane.getChildren().addAll(a);
-        stage.setScene(new Scene(pane, 854, 480));
+        pane.getChildren().addAll(nodes);
+        Main.stage.setScene(new Scene(pane, ComparatorValue.WIDTH, ComparatorValue.HEIGHT));
+        Main.stage.show();
     }
 }
