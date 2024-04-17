@@ -38,14 +38,15 @@ public class Permanently {
         File config = new File(main.getAbsolutePath() + "\\config.ini");
         INIFileHandler ini = new INIFileHandler();
         mainConfigFile = config;
+
         if (!config.exists()) {
-//            try {
-//                ini.load(Permanently.getMainConfigFile().getAbsolutePath());
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
             try {
                 boolean newFile = config.createNewFile();
+                try {
+                    ini.load(Permanently.getMainConfigFile().getAbsolutePath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 initINI(ini, config.getAbsolutePath());
             } catch (IOException e) {
                 throw new RuntimeException(e);
