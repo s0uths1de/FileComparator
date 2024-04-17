@@ -34,20 +34,36 @@ public class SetButton {
 
     public static FileEntity setInfo(Button button, Stage stage) {
         FileEntity fe = new FileEntity();
+        INIFileHandler ini = new INIFileHandler();
+        try {
+            ini.load(Permanently.getMainConfigFile().getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         button.setText("读取信息文件");
         button.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
             fe.setInfo(fileChooser.showOpenDialog(stage));
+            try {
+                ini.setValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE, fe.getInfo().getAbsolutePath());
+                ini.save(Permanently.getMainConfigFile().getAbsolutePath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
-
         setOnDragOver(button);
-
         button.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {
                 for (File file : db.getFiles()) {
                     if (file != null) {
                         fe.setInfo(file);
+                        try {
+                            ini.setValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE, fe.getInfo().getAbsolutePath());
+                            ini.save(Permanently.getMainConfigFile().getAbsolutePath());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         return;
                     }
                 }
@@ -57,11 +73,17 @@ public class SetButton {
     }
 
     public static FileEntity setExplorer(Button button, Stage stage, FileEntity fe) {
+        INIFileHandler ini = new INIFileHandler();
+        try {
+            ini.load(Permanently.getMainConfigFile().getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         button.setText("读取作业");
         button.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             File folder = directoryChooser.showDialog(stage);
-            if (folder != null) fe.setHomework(folder);
+            sava(fe, ini, folder);
         });
 
         setOnDragOver(button);
@@ -70,14 +92,23 @@ public class SetButton {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {
                 for (File file : db.getFiles()) {
-                    if (file != null) {
-                        fe.setHomework(file);
-                        return;
-                    }
+                    sava(fe, ini, file);
                 }
             }
         });
         return fe;
+    }
+
+    private static void sava(FileEntity fe, INIFileHandler ini, File file) {
+        if (file != null) {
+            fe.setHomework(file);
+            try {
+                ini.setValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_EXPLORER, fe.getHomework().getAbsolutePath());
+                ini.save(Permanently.getMainConfigFile().getAbsolutePath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private static void setOnDragOver(Button explorerButton) {
@@ -89,7 +120,16 @@ public class SetButton {
     public static void setStart(FileEntity fe) {
         final String fileFormat = "{ID}{NAME}"; // TODO: allow user to modify this
         //final String fileFormat = "{ID}{NAME}.docx"; // TODO: ignore extension name at present
-
+        INIFileHandler handler = new INIFileHandler();
+        try {
+            handler.load(Permanently.getMainConfigFile().getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String file = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE).replace("\"","");
+        String explorer = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_EXPLORER).replace("\"","");
+        fe.setInfo(new File(file));
+        fe.setHomework(new File(explorer));
         if (fe.getInfo() == null || fe.getHomework() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("错误");
@@ -102,6 +142,13 @@ public class SetButton {
             return;
         }
         FileComparator comparator = new FileComparator(fe.getInfo(), fe.getHomework());
+        List<List> lists = getLists(comparator, fileFormat);
+        ControllerMain.setIsOneOrTwo(true);
+        ControllerMain.setList(lists);
+        setScene(false);
+    }
+
+    private static List<List> getLists(FileComparator comparator, String fileFormat) {
         Map<String, String> infoMap = comparator.getInfoMap();
         List<String> directoryList = comparator.getDirectoryList();
         List<String> id = comparator.getId();
@@ -132,11 +179,10 @@ public class SetButton {
             add(nameError);
             add(unknownList);
         }};
-        ControllerMain.setIsOneOrTwo(true);
-        ControllerMain.setList(lists);
-        setScene(false);
+        return lists;
     }
-    public static void setScene(boolean isMain){
+
+    public static void setScene(boolean isMain) {
         FXMLLoader resultFXML = new FXMLLoader(Main.class.getResource("/top/s0uths1de/filecomparator/fxmlui/main.fxml"));
         Pane resultUi = null;
         try {
@@ -144,14 +190,23 @@ public class SetButton {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        List<Node> nodes =null;
+        List<Node> nodes = null;
         if (isMain)
-           nodes =resultUi.getChildren().subList(0, 1);
+            nodes = resultUi.getChildren().subList(0, 1);
         else
-           nodes =resultUi.getChildren().subList(1, 2);
+            nodes = resultUi.getChildren().subList(1, 2);
         Pane pane = new StackPane();
         pane.getChildren().addAll(nodes);
         Main.stage.setScene(new Scene(pane, ComparatorValue.WIDTH, ComparatorValue.HEIGHT));
         Main.stage.show();
+    }
+
+    public static void setUnrealized() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("错误");
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
+        alert.setContentText("未实现");
+        alert.showAndWait();
     }
 }

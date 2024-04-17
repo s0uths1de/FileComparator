@@ -13,9 +13,22 @@
          <children>
             <HBox alignment="CENTER" layoutX="259.0" layoutY="190.0" prefHeight="100.0" prefWidth="336.0">
                <children>
-                  <Button fx:id="readInfo" mnemonicParsing="false" stylesheets="@../assets/css/button.css" text="读取文件" />
-                  <Button fx:id="readExplorer" mnemonicParsing="false" stylesheets="@../assets/css/button.css" text="读取作业" />
-                  <Button fx:id="start" mnemonicParsing="false" stylesheets="@../assets/css/button.css" text="开始" />
+                  <Button fx:id="readInfo" mnemonicParsing="false" stylesheets="@../assets/css/button.css" text="读取文件">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Button>
+                  <Button fx:id="readExplorer" mnemonicParsing="false" stylesheets="@../assets/css/button.css" text="读取作业">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Button>
+                  <Button fx:id="start" mnemonicParsing="false" stylesheets="@../assets/css/button.css" text="开始">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Button>
+                  <Button fx:id="about" mnemonicParsing="false" stylesheets="@../assets/css/button.css" text="关于">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Button>
                </children>
             </HBox>
          </children>
@@ -31,12 +44,30 @@
                      </HBox.margin></ListView>
                   <VBox alignment="CENTER" prefHeight="480.0" prefWidth="216.0" stylesheets="@../assets/css/button.css">
                      <children>
-                        <Button fx:id="showAll" mnemonicParsing="false" text="总览" />
-                        <Button fx:id="showNameError" mnemonicParsing="false" text="名字错误" />
-                        <Button fx:id="showIdName" mnemonicParsing="false" text="学号错误" />
-                        <Button fx:id="showUnknown" mnemonicParsing="false" text="未知学生" />
-                        <Button fx:id="rename" mnemonicParsing="false" text="重命名" />
-                        <Button fx:id="replace" mnemonicParsing="false" text="替换" />
+                        <Button fx:id="showAll" mnemonicParsing="false" text="总览">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin></Button>
+                        <Button fx:id="showNameError" mnemonicParsing="false" text="名字错误">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin></Button>
+                        <Button fx:id="showIdName" mnemonicParsing="false" text="学号错误">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin></Button>
+                        <Button fx:id="showUnknown" mnemonicParsing="false" text="未知学生">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin></Button>
+                        <Button fx:id="rename" mnemonicParsing="false" text="重命名">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin></Button>
+                        <Button fx:id="replace" mnemonicParsing="false" text="替换">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin></Button>
                         <Button fx:id="back" mnemonicParsing="false" text="返回" />
                      </children>
                   </VBox>

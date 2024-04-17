@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import top.s0uths1de.function.Permanently;
 import top.s0uths1de.tools.Simplify;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Permanently.init();
         FXMLLoader mainFXML = new FXMLLoader(getClass().getResource("/top/s0uths1de/filecomparator/fxmlui/main.fxml"));
         Pane root = mainFXML.load();
         List<Node> nodes = root.getChildren().subList(0, 1);

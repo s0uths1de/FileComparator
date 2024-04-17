@@ -18,8 +18,24 @@ public class FileComparator {
     private final List<String> directoryList;
     private List<String> name;
     private List<String> id;
-    public static final String matchTenConsecutiveDigits = "\\d+";
-    public static final String matchChineseCharacter = "[\u4e00-\u9fff]+";
+    public static String matchTenConsecutiveDigits;
+    public static String matchChineseCharacter;
+
+    public static String getMatchTenConsecutiveDigits() {
+        return matchTenConsecutiveDigits;
+    }
+
+    public static void setMatchTenConsecutiveDigits(String matchTenConsecutiveDigits) {
+        FileComparator.matchTenConsecutiveDigits = matchTenConsecutiveDigits;
+    }
+
+    public static String getMatchChineseCharacter() {
+        return matchChineseCharacter;
+    }
+
+    public static void setMatchChineseCharacter(String matchChineseCharacter) {
+        FileComparator.matchChineseCharacter = matchChineseCharacter;
+    }
 
     public FileComparator(File info, File directory) {
         this.infoMap = readInfo(info.getPath());
@@ -52,6 +68,8 @@ public class FileComparator {
     }
 
     private static String match(String string, String regex) {
+        System.out.println(string);
+        System.out.println(regex);
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(string);
         if (matcher.find()) {
