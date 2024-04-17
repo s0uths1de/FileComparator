@@ -38,12 +38,12 @@ public class Permanently {
         File config = new File(main.getAbsolutePath() + "\\config.ini");
         INIFileHandler ini = new INIFileHandler();
         mainConfigFile = config;
-        try {
-            ini.load(Permanently.getMainConfigFile().getAbsolutePath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         if (!config.exists()) {
+//            try {
+//                ini.load(Permanently.getMainConfigFile().getAbsolutePath());
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
             try {
                 boolean newFile = config.createNewFile();
                 initINI(ini, config.getAbsolutePath());
@@ -51,6 +51,7 @@ public class Permanently {
                 throw new RuntimeException(e);
             }
         }
+
         FileComparator.setMatchTenConsecutiveDigits(ini.getValue(SECTION_CRITICAL, "regularExpressionKey").replace("\"", ""));
         FileComparator.setMatchChineseCharacter(ini.getValue(SECTION_CRITICAL, "regularExpressionValue").replace("\"", ""));
     }
