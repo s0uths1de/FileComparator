@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class INIFileHandler {
-    private Map<String, Map<String, String>> sections = new HashMap<>();
+    private final Map<String, Map<String, String>> sections = new HashMap<>();
 
     public void load(String filename) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {

@@ -16,8 +16,8 @@ public class FileComparator {
 
     private final Map<String, String> infoMap;
     private final List<String> directoryList;
-    private List<String> name;
-    private List<String> id;
+    private final List<String> name;
+    private final List<String> id;
     public static String matchTenConsecutiveDigits;
     public static String matchChineseCharacter;
 

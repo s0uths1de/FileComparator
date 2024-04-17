@@ -37,12 +37,7 @@ public class Permanently {
         }
         File config = new File(main.getAbsolutePath() + "\\config.ini");
         INIFileHandler ini = new INIFileHandler();
-        mainConfigFile=config;
-//        try {
-//            ini.load(config.getAbsolutePath());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        mainConfigFile = config;
         try {
             ini.load(Permanently.getMainConfigFile().getAbsolutePath());
         } catch (IOException e) {
@@ -56,8 +51,8 @@ public class Permanently {
                 throw new RuntimeException(e);
             }
         }
-        FileComparator.setMatchTenConsecutiveDigits(ini.getValue(SECTION_CRITICAL, "regularExpressionKey").replace("\"",""));
-        FileComparator.setMatchChineseCharacter(ini.getValue(SECTION_CRITICAL, "regularExpressionValue").replace("\"",""));
+        FileComparator.setMatchTenConsecutiveDigits(ini.getValue(SECTION_CRITICAL, "regularExpressionKey").replace("\"", ""));
+        FileComparator.setMatchChineseCharacter(ini.getValue(SECTION_CRITICAL, "regularExpressionValue").replace("\"", ""));
     }
 
     private static void initINI(INIFileHandler ini, String config) {

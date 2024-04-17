@@ -72,7 +72,7 @@ public class SetButton {
         return fe;
     }
 
-    public static FileEntity setExplorer(Button button, Stage stage, FileEntity fe) {
+    public static void setExplorer(Button button, Stage stage, FileEntity fe) {
         INIFileHandler ini = new INIFileHandler();
         try {
             ini.load(Permanently.getMainConfigFile().getAbsolutePath());
@@ -96,7 +96,6 @@ public class SetButton {
                 }
             }
         });
-        return fe;
     }
 
     private static void sava(FileEntity fe, INIFileHandler ini, File file) {
