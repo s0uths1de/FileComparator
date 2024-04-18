@@ -43,6 +43,8 @@ public class SetButton {
         button.setText("读取信息文件");
         button.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
+            if (fileChooser.showOpenDialog(stage)==null)
+                return;
             fe.setInfo(fileChooser.showOpenDialog(stage));
             try {
                 ini.setValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE, fe.getInfo().getAbsolutePath());
@@ -55,6 +57,8 @@ public class SetButton {
         button.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {
+                if (!db.hasFiles())
+                    return;
                 for (File file : db.getFiles()) {
                     if (file != null) {
                         fe.setInfo(file);
@@ -82,6 +86,8 @@ public class SetButton {
         button.setText("读取作业");
         button.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
+            if (directoryChooser.showDialog(stage)==null)
+                return;
             File folder = directoryChooser.showDialog(stage);
             sava(fe, ini, folder);
         });
@@ -91,6 +97,8 @@ public class SetButton {
         button.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {
+                if (!db.hasFiles())
+                    return;
                 for (File file : db.getFiles()) {
                     sava(fe, ini, file);
                 }
@@ -129,6 +137,8 @@ public class SetButton {
         String explorer = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_EXPLORER).replace("\"","");
         fe.setInfo(new File(file));
         fe.setHomework(new File(explorer));
+        System.out.println(fe.getInfo().getAbsolutePath());
+        System.out.println(fe.getHomework().getAbsolutePath());
         if (fe.getInfo() == null || fe.getHomework() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("错误");

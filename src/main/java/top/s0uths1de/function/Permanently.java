@@ -52,6 +52,11 @@ public class Permanently {
                 throw new RuntimeException(e);
             }
         }
+        try {
+            ini.load(Permanently.getMainConfigFile().getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         FileComparator.setMatchTenConsecutiveDigits(ini.getValue(SECTION_CRITICAL, "regularExpressionKey").replace("\"", ""));
         FileComparator.setMatchChineseCharacter(ini.getValue(SECTION_CRITICAL, "regularExpressionValue").replace("\"", ""));

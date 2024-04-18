@@ -68,8 +68,6 @@ public class FileComparator {
     }
 
     private static String match(String string, String regex) {
-        System.out.println(string);
-        System.out.println(regex);
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(string);
         if (matcher.find()) {

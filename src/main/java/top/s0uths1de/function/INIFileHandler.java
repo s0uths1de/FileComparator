@@ -14,14 +14,11 @@ public class INIFileHandler {
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty() || line.startsWith(";") || line.startsWith("#")) {
-                    // Ignore empty lines and comments
                     continue;
                 } else if (line.startsWith("[") && line.endsWith("]")) {
-                    // New section
                     currentSection = line.substring(1, line.length() - 1);
                     sections.put(currentSection, new HashMap<>());
                 } else if (currentSection != null && line.contains("=")) {
-                    // Key-value pair
                     int separatorIndex = line.indexOf("=");
                     String key = line.substring(0, separatorIndex).trim();
                     String value = line.substring(separatorIndex + 1).trim();
