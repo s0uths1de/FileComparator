@@ -1,5 +1,6 @@
 package top.s0uths1de.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import top.s0uths1de.ComparatorValue;
 import top.s0uths1de.entity.FileEntity;
+import top.s0uths1de.function.INIFileHandler;
+import top.s0uths1de.function.Permanently;
 import top.s0uths1de.function.SetButton;
 import top.s0uths1de.tools.Simplify;
 
@@ -72,6 +75,7 @@ public class ControllerMain {
     private ListView<String> other;
 
     private static FileEntity fe;
+    private static INIFileHandler ini;
 
     private static boolean isOneOrTwo;
 
@@ -80,8 +84,15 @@ public class ControllerMain {
     @FXML
     void initialize() {
         Stage stage = new Stage();
-        fe = SetButton.setInfo(readInfo, stage);
-        SetButton.setExplorer(readExplorer, stage, fe);
+        fe = new FileEntity();
+        ini = new INIFileHandler();
+        try {
+            ini.load(Permanently.getMainConfigFile().getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        SetButton.setInfo(readInfo, stage, fe,ini);
+        SetButton.setExplorer(readExplorer, stage, fe,ini);
         start.setOnAction(event -> {
             SetButton.setStart(fe);
         });
@@ -116,7 +127,7 @@ public class ControllerMain {
             alert.setHeaderText(null);
             alert.setGraphic(null);
             Button copy = new Button("copy");
-            alert.setContentText("Author:" + ComparatorValue.AUTHOR + "\n"+ComparatorValue.GITHUB_REPERTORY);
+            alert.setContentText("Author:" + ComparatorValue.AUTHOR + "\n" + ComparatorValue.GITHUB_REPERTORY);
             alert.showAndWait();
         });
     }

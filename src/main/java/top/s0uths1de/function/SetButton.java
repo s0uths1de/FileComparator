@@ -39,25 +39,19 @@ public class SetButton {
         fe = new FileEntity();
     }
 
-    public static FileEntity setInfo(Button button, Stage stage) {
-        FileEntity fe = new FileEntity();
-        INIFileHandler ini = new INIFileHandler();
-        try {
-            ini.load(Permanently.getMainConfigFile().getAbsolutePath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static void setInfo(Button button, Stage stage,FileEntity fe ,INIFileHandler ini) {
         button.setText("读取信息文件");
         button.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
-            if (fileChooser.showOpenDialog(stage) == null)
-                return;
-            fe.setInfo(fileChooser.showOpenDialog(stage));
-            try {
-                ini.setValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE, fe.getInfo().getAbsolutePath());
-                ini.save(Permanently.getMainConfigFile().getAbsolutePath());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                fe.setInfo(file);
+                try {
+                    ini.setValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE, fe.getInfo().getAbsolutePath());
+                    ini.save(Permanently.getMainConfigFile().getAbsolutePath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         setOnDragOver(button);
@@ -80,23 +74,18 @@ public class SetButton {
                 }
             }
         });
-        return fe;
     }
 
-    public static void setExplorer(Button button, Stage stage, FileEntity fe) {
-        INIFileHandler ini = new INIFileHandler();
-        try {
-            ini.load(Permanently.getMainConfigFile().getAbsolutePath());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static void setExplorer(Button button, Stage stage, FileEntity fe,INIFileHandler ini ) {
+
         button.setText("读取作业");
         button.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
-            if (directoryChooser.showDialog(stage) == null)
-                return;
-            File folder = directoryChooser.showDialog(stage);
-            sava(fe, ini, folder);
+            File file = directoryChooser.showDialog(stage);
+            if (file!= null) {
+                File folder = file;
+                sava(fe, ini, folder);
+            }
         });
 
         setOnDragOver(button);
@@ -255,7 +244,7 @@ public class SetButton {
             String value = textField.getText();
             if (value.isEmpty()) {
                 text.setText("请重写输入");
-                vBox.getChildren().set(0,text);
+                vBox.getChildren().set(0, text);
             } else {
                 INIFileHandler handler = new INIFileHandler();
 //                String file = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE).replace("\"", "");
