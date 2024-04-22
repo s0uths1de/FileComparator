@@ -10,7 +10,6 @@ public class Permanently {
     static final String PATH = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 
     public static final String SECTION_CRITICAL = "SECTION_CRITICAL";
-    public static final String IS_INITIALIZATION = "isInitialization";
     public static final String LAST_TIME_FILE = "lastTimeFile";
     public static final String LAST_TIME_EXPLORER = "lastTimeExplorer";
     public static final String REGULAR_EXPRESSION_KEY = "regularExpressionKey";
@@ -63,7 +62,6 @@ public class Permanently {
     }
 
     private static void initINI(INIFileHandler ini, String config) {
-        ini.setValue(SECTION_CRITICAL, IS_INITIALIZATION, "1");
         ini.setValue(SECTION_CRITICAL, LAST_TIME_FILE, "");
         ini.setValue(SECTION_CRITICAL, LAST_TIME_EXPLORER, "");
         ini.setValue(SECTION_CRITICAL, REGULAR_EXPRESSION_KEY, "\\d{10}");

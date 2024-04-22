@@ -1,14 +1,20 @@
 package top.s0uths1de.function;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -17,6 +23,7 @@ import top.s0uths1de.Main;
 import top.s0uths1de.controller.ControllerMain;
 import top.s0uths1de.core.FileComparator;
 import top.s0uths1de.entity.FileEntity;
+import top.s0uths1de.tools.Simplify;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +50,7 @@ public class SetButton {
         button.setText("读取信息文件");
         button.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
-            if (fileChooser.showOpenDialog(stage)==null)
+            if (fileChooser.showOpenDialog(stage) == null)
                 return;
             fe.setInfo(fileChooser.showOpenDialog(stage));
             try {
@@ -86,7 +93,7 @@ public class SetButton {
         button.setText("读取作业");
         button.setOnAction(event -> {
             DirectoryChooser directoryChooser = new DirectoryChooser();
-            if (directoryChooser.showDialog(stage)==null)
+            if (directoryChooser.showDialog(stage) == null)
                 return;
             File folder = directoryChooser.showDialog(stage);
             sava(fe, ini, folder);
@@ -133,8 +140,8 @@ public class SetButton {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String file = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE).replace("\"","");
-        String explorer = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_EXPLORER).replace("\"","");
+        String file = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE).replace("\"", "");
+        String explorer = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_EXPLORER).replace("\"", "");
         fe.setInfo(new File(file));
         fe.setHomework(new File(explorer));
         System.out.println(fe.getInfo().getAbsolutePath());
@@ -160,8 +167,8 @@ public class SetButton {
     private static List<List> getLists(FileComparator comparator, String fileFormat) {
         Map<String, String> infoMap = comparator.getInfoMap();
         List<String> directoryList = comparator.getDirectoryList();
-        List<String> id = comparator.getId();
-        List<String> name = comparator.getName();
+        List<String> id = comparator.getKey();
+        List<String> name = comparator.getValue();
         List<String> correctList = new ArrayList<>();
         List<String> unpaidList = new ArrayList<>();
         List<String> idError = new ArrayList<>();
@@ -181,14 +188,14 @@ public class SetButton {
             else if (name.contains(stuname)) idError.add(current);
             else unpaidList.add(current);
         });
-        List<List> lists = new ArrayList<>() {{
+
+        return new ArrayList<>() {{
             add(correctList);
             add(unpaidList);
             add(idError);
             add(nameError);
             add(unknownList);
         }};
-        return lists;
     }
 
     public static void setScene(boolean isMain) {
@@ -217,5 +224,51 @@ public class SetButton {
         alert.setGraphic(null);
         alert.setContentText("未实现");
         alert.showAndWait();
+    }
+
+    public static void setReplace(FileEntity fe) {
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setHeaderText(null);
+        Stage stage = new Stage();
+        TextField textField = new TextField();
+        VBox vBox = new VBox();
+        Text text = new Text();
+        Button button = new Button();
+        button.setText("确定");
+        Button cancel = new Button();
+        cancel.setText("取消");
+        text.setText("请输入你要替换的内容");
+        vBox.getChildren().add(text);
+        vBox.getChildren().add(textField);
+        HBox hBox = new HBox();
+        hBox.getChildren().add(button);
+        hBox.getChildren().add(cancel);
+        vBox.getChildren().add(hBox);
+        vBox.setAlignment(Pos.CENTER);
+        hBox.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(vBox, 200, 70);
+        Image image = new Image(Simplify.urlToString(Main.class, "/top/s0uths1de/filecomparator/assets/icon.png").toString());
+        stage.getIcons().setAll(image);
+        stage.setScene(scene);
+        stage.show();
+        button.setOnAction(event -> {
+            String value = textField.getText();
+            if (value.isEmpty()) {
+                text.setText("请重写输入");
+                vBox.getChildren().set(0,text);
+            } else {
+                INIFileHandler handler = new INIFileHandler();
+//                String file = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_FILE).replace("\"", "");
+//                String explorer = handler.getValue(Permanently.SECTION_CRITICAL, Permanently.LAST_TIME_EXPLORER).replace("\"", "");
+                try {
+                    handler.load(Permanently.getMainConfigFile().getAbsolutePath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                FileComparator.renameFileName(value);
+                stage.close();
+            }
+        });
+        cancel.setOnAction(event -> stage.close());
     }
 }

@@ -42,9 +42,6 @@ public class ControllerMain {
     private Button readInfo;
 
     @FXML
-    private Button rename;
-
-    @FXML
     private Button replace;
 
     @FXML
@@ -89,29 +86,27 @@ public class ControllerMain {
             SetButton.setStart(fe);
         });
         if (isOneOrTwo) {
-            setList(false, this.other, 0, "已交作业");
-            setList(false, this.unpaidList, 1, "未交作业");
+            setList(false, this.other, 0, "已交");
+            setList(false, this.unpaidList, 1, "未交");
         }
         showNameError.setOnAction(event -> {
-            setList(true, this.other, 3, "名字错误");
+            setList(true, this.other, 3, "Key错误");
         });
         showIdName.setOnAction(event -> {
-            setList(true, this.other, 2, "学号错误");
+            setList(true, this.other, 2, "Value错误");
         });
         showAll.setOnAction(event -> {
-            setList(true, this.other, 0, "已交作业");
+            setList(true, this.other, 0, "已交");
         });
         showUnknown.setOnAction(event -> {
-            setList(true, this.other, 4, "未知学生");
+            setList(true, this.other, 4, "未知");
         });
         back.setOnAction(event -> {
             ControllerMain.setIsOneOrTwo(false);
             SetButton.setScene(true);
         });
         replace.setOnAction(event -> {
-        });
-        rename.setOnAction(event -> {
-            SetButton.setUnrealized();
+            SetButton.setReplace(fe);
         });
         about.setOnAction(event -> {
             Image image = new Image(Simplify.urlToString(this.getClass(), "/top/s0uths1de/filecomparator/assets/icon.png").toString());

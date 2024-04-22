@@ -4,14 +4,14 @@ import java.io.File;
 
 public class FileEntity {
     File info;
-    File homework;
+    File explorer;
 
     public FileEntity() {
     }
 
-    public FileEntity(File info, File homework) {
+    public FileEntity(File info, File explorer) {
         this.info = info;
-        this.homework = homework;
+        this.explorer = explorer;
     }
 
     public File getInfo() {
@@ -23,18 +23,18 @@ public class FileEntity {
     }
 
     public File getHomework() {
-        return homework;
+        return explorer;
     }
 
-    public void setHomework(File homework) {
-        this.homework = homework;
+    public void setHomework(File explorer) {
+        this.explorer = explorer;
     }
 
     @Override
     public String toString() {
         return "FileEntity{" +
                 "info=" + info +
-                ", homework=" + homework +
+                ", explorer=" + explorer +
                 '}';
     }
 }

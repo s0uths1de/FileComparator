@@ -16,10 +16,21 @@ public class FileComparator {
 
     private final Map<String, String> infoMap;
     private final List<String> directoryList;
-    private final List<String> name;
-    private final List<String> id;
-    public static String matchTenConsecutiveDigits;
-    public static String matchChineseCharacter;
+    private final List<String> value;
+    private final List<String> key;
+    private final List<String> explorerNames;
+    private static String matchTenConsecutiveDigits;
+    private static String matchChineseCharacter;
+    private static File directory;
+
+    public FileComparator(File info, File directory) {
+        this.infoMap = readInfo(info.getPath());
+        this.value = new ArrayList<>();
+        this.key = new ArrayList<>();
+        this.explorerNames = new ArrayList<>();
+        this.directoryList = listFiles(directory.getPath());
+        this.directory = directory;
+    }
 
     public static String getMatchTenConsecutiveDigits() {
         return matchTenConsecutiveDigits;
@@ -37,19 +48,26 @@ public class FileComparator {
         FileComparator.matchChineseCharacter = matchChineseCharacter;
     }
 
-    public FileComparator(File info, File directory) {
-        this.infoMap = readInfo(info.getPath());
-        this.name = new ArrayList<>();
-        this.id = new ArrayList<>();
-        this.directoryList = listFiles(directory.getPath());
-    }
 
+    /**
+     * 获取信息文件的Key与Value或组成的MaP
+     */
     public Map<String, String> getInfoMap() {
         return infoMap;
     }
 
+    /**
+     * 获取读取到的文件经过正则识别的文件名字List集合
+     */
     public List<String> getDirectoryList() {
         return directoryList;
+    }
+
+    /**
+     * 获取读取到文件未经过识别的文件名的List集合
+     */
+    public List<String> getExplorerNames() {
+        return explorerNames;
     }
 
     public static Map<String, String> readInfo(String info) {
@@ -57,9 +75,9 @@ public class FileComparator {
         try (BufferedReader br = new BufferedReader(new FileReader(info, Charset.forName("GB2312")))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String id = match(line, matchTenConsecutiveDigits);
-                String name = match(line, matchChineseCharacter);
-                idAndNameMap.put(id, name);
+                String key = match(line, matchTenConsecutiveDigits);
+                String value = match(line, matchChineseCharacter);
+                idAndNameMap.put(key, value);
             }
         } catch (NullPointerException | IOException e) {
             e.printStackTrace();
@@ -85,16 +103,17 @@ public class FileComparator {
             for (File file : files) {
                 if (file.isFile()) {
                     String fileName = file.getName();
-                    String id = match(fileName, matchTenConsecutiveDigits);
-                    String name = match(fileName, matchChineseCharacter);
-                    if (id == null && name == null) {
+                    explorerNames.add(fileName);
+                    String key = match(fileName, matchTenConsecutiveDigits);
+                    String value = match(fileName, matchChineseCharacter);
+                    if (key == null && value == null) {
                         fileList.add(file.getName());
                     } else {
-                        id = id == null ? "" : id;
-                        name = name == null ? "" : name;
-                        this.id.add(id);
-                        this.name.add(name);
-                        fileList.add(id + name);
+                        key = key == null ? "" : key;
+                        value = value == null ? "" : value;
+                        this.key.add(key);
+                        this.value.add(value);
+                        fileList.add(key + value);
                     }
                 }
             }
@@ -102,11 +121,30 @@ public class FileComparator {
         return fileList;
     }
 
-    public List<String> getName() {
-        return name;
+    public static void renameFileName(String regex) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                String fileName = file.getName();
+                String key = match(fileName, matchTenConsecutiveDigits);
+                String value = match(fileName, matchChineseCharacter);
+                String fileAbsolute = file.getAbsolutePath().substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
+                fileName = regex;
+                if (key != null)
+                    fileName = fileName.replace("{KEY}", key);
+                if (value != null)
+                    fileName = fileName.replace("{VALUE}", value);
+                File newFile = new File(fileAbsolute + "\\" + fileName);
+                boolean result = file.renameTo(newFile);
+            }
+        }
     }
 
-    public List<String> getId() {
-        return id;
+    public List<String> getValue() {
+        return value;
+    }
+
+    public List<String> getKey() {
+        return key;
     }
 }
